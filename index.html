@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohamed Awad — Backend Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0D14;
+    --card:#151926;
+    --line:rgba(255,255,255,0.08);
+    --line-strong:rgba(255,255,255,0.16);
+    --ink:#F3F5F9;
+    --muted:#8B93A8;
+    --accent-1:#6E8BFF;
+    --accent-2:#B98CFF;
+    --teal:#3FDDA8;
+    --teal-soft:rgba(63,221,168,0.12);
+    --gradient:linear-gradient(100deg,var(--accent-1),var(--accent-2));
+    --radius:12px;
+    --sans:'Inter', sans-serif;
+    --display:'Fraunces', serif;
+    --mono:'IBM Plex Mono', monospace;
+    --arabic:'Cairo', sans-serif;
+    --sidebar-w:270px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;font-size:15.5px;position:relative;}
+  body.lang-ar{font-family:var(--arabic);}
+  body.lang-en .ar{display:none;}
+  body.lang-ar .en{display:none;}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important;scroll-behavior:auto !important;}}
+  a{color:var(--accent-1);text-decoration:none;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent-1);outline-offset:3px;}
+  ul{list-style:none;}
+
+  body::after{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:200;opacity:.035;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .layout{display:flex;min-height:100vh;position:relative;}
+  body.lang-ar .layout{flex-direction:row-reverse;}
+
+  .sidebar{
+    width:var(--sidebar-w);flex-shrink:0;background:rgba(18,21,31,.7);backdrop-filter:blur(14px);
+    border-inline-end:1px solid var(--line);
+    padding:36px 28px;position:sticky;top:0;height:100vh;overflow-y:auto;
+  }
+  .sb-top{display:flex;align-items:center;gap:14px;}
+  @media (min-width:841px){.sb-top{flex-direction:column;align-items:flex-start;gap:18px;}}
+  .avatar{
+    width:112px;height:112px;border-radius:50%;background:var(--gradient);color:#0A0D14;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    font-family:var(--display);font-size:19px;font-weight:700;
+    box-shadow:0 0 0 1px var(--line-strong), 0 0 24px rgba(110,139,255,.35);
+    overflow:hidden;
+  }
+  .avatar img{width:100%;height:100%;object-fit:cover;}
+  body.lang-ar .avatar{font-family:var(--arabic);}
+  .sb-name{font-family:var(--display);font-size:21px;font-weight:600;line-height:1.25;color:#fff;}
+  body.lang-ar .sb-name{font-family:var(--arabic);font-weight:800;}
+  .sb-role{color:var(--muted);font-size:13px;margin-top:5px;}
+  .sb-status{display:flex;align-items:center;gap:7px;margin-top:14px;font-size:12px;color:var(--teal);font-weight:500;}
+  .sb-status .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pulse 2.2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:.45;}50%{opacity:1;}}
+
+  #langToggle{margin-top:18px;font-family:var(--mono);font-size:12px;font-weight:500;border:1px solid var(--line-strong);border-radius:20px;padding:6px 14px;background:var(--card);color:var(--ink);cursor:pointer;transition:border-color .15s;}
+  #langToggle:hover{border-color:var(--accent-1);}
+
+  .sb-nav{margin-top:32px;display:flex;flex-direction:column;gap:2px;}
+  .sb-nav a{color:var(--muted);font-size:13.5px;font-weight:500;padding:8px 10px;border-radius:6px;display:flex;align-items:center;gap:9px;transition:background .15s,color .15s;}
+  .sb-nav a:hover{background:rgba(110,139,255,.1);color:var(--accent-1);}
+  .sb-nav .n{font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+  .sb-contact{margin-top:32px;padding-top:20px;border-top:1px solid var(--line);}
+  .sb-contact a{display:block;font-size:12.5px;color:var(--muted);margin-bottom:7px;word-break:break-all;}
+  .sb-contact a:hover{color:var(--accent-1);}
+
+  @media (max-width:840px){
+    .layout{flex-direction:column;}
+    body.lang-ar .layout{flex-direction:column;}
+    .sidebar{width:100%;height:auto;position:relative;padding:24px;display:flex;flex-wrap:wrap;align-items:center;gap:14px;}
+    .avatar{width:50px;height:50px;font-size:15px;}
+    .sb-role,.sb-status,.sb-nav,.sb-contact{display:none;}
+  }
+
+  main{flex:1;min-width:0;position:relative;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 44px;position:relative;}
+  @media (max-width:1400px){.wrap{max-width:960px;}}
+  @media (max-width:840px){.wrap{padding:0 24px;max-width:100%;}}
+
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-1);display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+  body.lang-ar .eyebrow{font-family:var(--arabic);letter-spacing:0;font-weight:700;}
+  .eyebrow::before{content:'';width:6px;height:6px;background:var(--accent-1);border-radius:50%;flex-shrink:0;box-shadow:0 0 8px var(--accent-1);}
+
+  .hero{padding:70px 0 54px;position:relative;overflow:hidden;}
+  .glow{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:-1;}
+  .glow-1{width:380px;height:380px;background:rgba(110,139,255,.26);top:-140px;inset-inline-end:-100px;}
+  .glow-2{width:300px;height:300px;background:rgba(185,140,255,.18);top:260px;inset-inline-start:-120px;}
+
+  .hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:52px;align-items:start;}
+  @media (max-width:980px){.hero-grid{grid-template-columns:1fr;}}
+
+  .hero h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,3.6vw,44px);line-height:1.15;color:#fff;}
+  body.lang-ar .hero h1{font-family:var(--arabic);font-weight:800;}
+  .hero h1 .accent{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;font-style:italic;}
+  body.lang-ar .hero h1 .accent{font-style:normal;}
+  .hero p.lead{margin-top:20px;font-size:16px;color:var(--muted);max-width:520px;}
+  .ctas{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;}
+  .btn{font-size:14px;font-weight:500;padding:11px 22px;border-radius:var(--radius);border:1px solid var(--line-strong);display:inline-flex;align-items:center;gap:8px;transition:all .18s;cursor:pointer;}
+  .btn-primary{background:var(--gradient);color:#0A0D14;border-color:transparent;font-weight:600;}
+  .btn-primary:hover{box-shadow:0 0 24px rgba(110,139,255,.5);transform:translateY(-1px);}
+  .btn-ghost{color:var(--ink);background:rgba(255,255,255,.03);}
+  .btn-ghost:hover{border-color:var(--accent-1);color:var(--accent-1);}
+
+  .code-panel{background:rgba(21,25,38,.75);backdrop-filter:blur(10px);border:1px solid var(--line-strong);border-radius:var(--radius);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.35);align-self:stretch;}
+  .code-head{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);}
+  .code-head span{width:10px;height:10px;border-radius:50%;background:var(--line-strong);}
+  .code-head .fname{margin-inline-start:8px;font-family:var(--mono);font-size:12px;color:var(--muted);}
+  .code-body{padding:18px 20px;font-family:var(--mono);font-size:12.5px;line-height:2;overflow-x:auto;white-space:pre;}
+  .code-body .ln{color:#4B5266;display:inline-block;width:20px;user-select:none;}
+  .tok-kw{color:var(--accent-2);} .tok-cls{color:var(--accent-1);} .tok-str{color:var(--teal);}
+  .tok-cmt{color:#4B5266;} .tok-fn{color:#F3D27A;}
+  .cursor{display:inline-block;width:7px;height:13px;background:var(--accent-1);margin-inline-start:2px;animation:blink 1s step-end infinite;vertical-align:middle;}
+  @keyframes blink{50%{opacity:0;}}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:44px;}
+  @media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr);}}
+  .stat{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;}
+  .stat .num{font-family:var(--display);font-size:23px;font-weight:600;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  body.lang-ar .stat .num{font-family:var(--arabic);font-weight:800;}
+  .stat .label{font-size:12px;color:var(--muted);margin-top:3px;}
+
+  section{padding:56px 0;border-top:1px solid var(--line);}
+  h2{font-family:var(--display);font-weight:600;font-size:clamp(21px,2.2vw,26px);margin-bottom:28px;display:flex;align-items:baseline;gap:10px;color:#fff;}
+  body.lang-ar h2{font-family:var(--arabic);font-weight:800;}
+  h2 .idx{font-family:var(--mono);font-size:13px;color:var(--muted);font-weight:400;}
+
+  .about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:36px;align-items:start;}
+  @media (max-width:840px){.about-grid{grid-template-columns:1fr;}}
+  .about p{color:var(--muted);font-size:15.5px;}
+  .about p + p{margin-top:14px;}
+  .about strong{color:var(--ink);font-weight:600;}
+  .callout{background:rgba(110,139,255,.06);border:1px solid rgba(110,139,255,.22);border-radius:var(--radius);padding:22px 24px;}
+  .callout .q{font-family:var(--display);font-size:17px;line-height:1.5;color:#fff;}
+  body.lang-ar .callout .q{font-family:var(--arabic);font-weight:700;}
+  .callout .src{margin-top:12px;font-family:var(--mono);font-size:11.5px;color:var(--muted);}
+  body.lang-ar .callout .src{font-family:var(--arabic);}
+
+  .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+  .skill-mod{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;transition:border-color .18s,transform .18s;}
+  .skill-mod:hover{border-color:var(--accent-1);transform:translateY(-2px);}
+  .skill-mod .mod-label{font-family:var(--mono);font-size:11px;color:var(--accent-1);letter-spacing:.06em;text-transform:uppercase;margin-bottom:11px;}
+  body.lang-ar .skill-mod .mod-label{font-family:var(--arabic);letter-spacing:0;font-weight:700;font-size:13px;}
+  .skill-mod li{font-size:14px;padding:4px 0;color:var(--ink);}
+
+  #projectsContainer{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px;align-items:start;}
+  .card{position:relative;background:rgba(21,25,38,.6);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;transition:border-color .2s, box-shadow .2s, transform .2s;}
+  .card:hover{border-color:rgba(110,139,255,.4);box-shadow:0 16px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(110,139,255,.15);transform:translateY(-3px);}
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
+  .card-head h3{font-family:var(--display);font-size:18px;font-weight:600;color:#fff;}
+  body.lang-ar .card-head h3{font-family:var(--arabic);font-weight:800;}
+  .card-tag{font-family:var(--mono);font-size:10.5px;color:var(--teal);background:var(--teal-soft);padding:3px 10px;border-radius:20px;white-space:nowrap;border:1px solid rgba(63,221,168,.25);}
+  body.lang-ar .card-tag{font-family:var(--arabic);font-weight:600;}
+  .card p.desc{color:var(--muted);font-size:14px;margin-bottom:14px;}
+  .card .specs{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:14px;border-top:1px solid var(--line);margin-bottom:14px;}
+  .spec-label{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+  body.lang-ar .spec-label{font-family:var(--arabic);font-weight:600;letter-spacing:0;}
+  .spec-val{font-size:13px;color:var(--ink);}
+  .stack-tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .stack-tags span{font-family:var(--mono);font-size:10.5px;color:var(--accent-1);background:rgba(110,139,255,.1);padding:3px 9px;border-radius:4px;border:1px solid rgba(110,139,255,.2);}
+  body.lang-ar .stack-tags span{font-family:var(--arabic);}
+
+  #experienceContainer{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+  .xp-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-inline-start:3px solid var(--accent-1);border-radius:var(--radius);padding:20px 22px;}
+  .tl-role{font-family:var(--display);font-size:16.5px;font-weight:600;color:#fff;}
+  body.lang-ar .tl-role{font-family:var(--arabic);font-weight:800;}
+  .tl-meta{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin:5px 0 9px;}
+  body.lang-ar .tl-meta{font-family:var(--arabic);}
+  .tl-desc{color:var(--muted);font-size:13.5px;}
+
+  #eduContainer .xp-card{max-width:640px;}
+
+  footer.contact-sec{padding:56px 0 60px;border-top:1px solid var(--line);}
+  .contact-block p{color:var(--muted);max-width:480px;margin-bottom:24px;}
+  .contact-links{display:flex;flex-wrap:wrap;gap:12px;}
+</style>
+</head>
+<body class="lang-en">
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sb-top">
+      <div class="avatar" id="sbAvatar"><img src="assets/avatar.jpg" alt="" id="sbAvatarImg"></div>
+      <div><div class="sb-name" id="sbName"></div></div>
+    </div>
+    <div class="sb-role" id="sbRole"></div>
+    <button id="langToggle" type="button">العربية</button>
+    <nav class="sb-nav" id="sbNav"></nav>
+    <div class="sb-contact" id="sbContact"></div>
+  </aside>
+
+  <main>
+    <section class="hero wrap" style="border-top:none;">
+      <div class="glow glow-1"></div>
+      <div class="glow glow-2"></div>
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow" id="heroEyebrow"></div>
+          <h1 id="heroHeadline"></h1>
+          <p class="lead" id="heroLead"></p>
+          <div class="ctas">
+            <a href="#work" class="btn btn-primary" id="ctaPrimary"></a>
+            <a href="#contact" class="btn btn-ghost" id="ctaSecondary"></a>
+          </div>
+        </div>
+        <div class="code-panel">
+          <div class="code-head"><span></span><span></span><span></span><span class="fname">BookingAvailabilityService.php</span></div>
+          <div class="code-body"><span class="ln">1</span><span class="tok-kw">final class</span> <span class="tok-cls">BookingAvailabilityService</span>
+<span class="ln">2</span>  <span class="tok-kw">public function</span> <span class="tok-fn">resolve</span>(<span class="tok-cls">Booking</span> $booking): <span class="tok-cls">Slot</span>
+<span class="ln">3</span>    <span class="tok-cmt">// strategy per duration type</span>
+<span class="ln">4</span>    <span class="tok-kw">return</span> $this->strategyFor($booking)->resolve()<span class="cursor"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about wrap" id="about">
+      <h2><span class="idx">01</span><span class="en">About</span><span class="ar">نبذة</span></h2>
+      <div class="about-grid">
+        <div id="aboutText"></div>
+        <div class="callout">
+          <div class="q" id="calloutText"></div>
+          <div class="src" id="calloutSrc"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="wrap">
+      <h2><span class="idx">02</span><span class="en">Skills</span><span class="ar">المهارات</span></h2>
+      <div class="skills-grid" id="skillsContainer"></div>
+    </section>
+
+    <section id="work" class="wrap">
+      <h2><span class="idx">03</span><span class="en">Selected work</span><span class="ar">مشاريع مختارة</span></h2>
+      <div id="projectsContainer"></div>
+    </section>
+
+    <section id="experience" class="wrap">
+      <h2><span class="idx">04</span><span class="en">Experience</span><span class="ar">الخبرة</span></h2>
+      <div id="experienceContainer"></div>
+    </section>
+
+    <section id="education" class="wrap">
+      <h2><span class="idx">05</span><span class="en">Education</span><span class="ar">التعليم</span></h2>
+      <div id="eduContainer"></div>
+    </section>
+
+    <footer id="contact" class="contact-sec wrap">
+      <div class="contact-block">
+        <h2><span class="idx">06</span><span class="en">Contact</span><span class="ar">تواصل</span></h2>
+        <p id="contactIntro"></p>
+        <div class="contact-links" id="contactLinks"></div>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script>
+/* =====================================================================
+   ALL SITE TEXT LIVES HERE. Edit anything below — headline, about text,
+   skills, experience, education, contact — without touching HTML/CSS.
+   Every field has an _en and _ar version. To add a PROJECT: copy one
+   object inside PROJECTS and edit it. To add a SKILL MODULE or an
+   EXPERIENCE entry, do the same inside SKILLS / EXPERIENCE.
+   ===================================================================== */
+
+const PROFILE = {
+  name_en: "Mohamed Awad", name_ar: "محمد عوض",
+  initials: "MA",
+  role_en: "Backend Software Engineer", role_ar: "مهندس برمجيات باك إند",
+  status_en: "Open to remote roles", status_ar: "متاح لفرص عن بُعد",
+  email: "ma7amedawad@gmail.com",
+  phone_display: "+20 101 494 0640",
+  phone_href: "+201014940640",
+  github: "https://github.com/mo7amed-awad",
+  linkedin: "https://linkedin.com/in/mo7amed-awad",
+  cv_href: "assets/Mohamed_Awad_CV.pdf"
+};
+
+const NAV = [
+  { id: "about", en: "About", ar: "نبذة" },
+  { id: "skills", en: "Skills", ar: "المهارات" },
+  { id: "work", en: "Work", ar: "المشاريع" },
+  { id: "experience", en: "Experience", ar: "الخبرة" },
+  { id: "education", en: "Education", ar: "التعليم" },
+  { id: "contact", en: "Contact", ar: "تواصل" }
+];
+
+const HERO = {
+  eyebrow_en: "Laravel — DDD — Filament", eyebrow_ar: "Laravel — DDD — Filament",
+  headline_before_en: "Backend systems that stay ", headline_before_ar: "أبني أنظمة باك إند ",
+  headline_accent_en: "predictable", headline_accent_ar: "ثابتة يمكن التنبؤ بسلوكها",
+  headline_after_en: " under real traffic.", headline_after_ar: " تحت الضغط الحقيقي.",
+  lead_en: "Backend software engineer with 3+ years building scalable, real-time Laravel applications across real estate, delivery, e-commerce, and healthcare. Specialized in modular DDD architecture, payment integrations, and Filament dashboards.",
+  lead_ar: "مهندس باك إند بخبرة تزيد عن 3 سنوات في بناء تطبيقات Laravel قابلة للتوسع وريل-تايم، في مجالات العقارات والتوصيل والتجارة الإلكترونية والرعاية الصحية. متخصص في العمارة المعيارية بمنهج DDD، وتكامل بوابات الدفع، ولوحات تحكم Filament.",
+  cta_primary_en: "View projects", cta_primary_ar: "شوف المشاريع",
+  cta_secondary_en: "Get in touch", cta_secondary_ar: "تواصل معايا"
+};
+
+const STATS = [
+  { num: "3+", label_en: "Years experience", label_ar: "سنين خبرة" },
+  { num: "6", label_en: "Shipped projects", label_ar: "مشاريع منفّذة" },
+  { num: "4", label_en: "Domains covered", label_ar: "مجالات مختلفة" },
+  { num: "3", label_en: "Payment gateways", label_ar: "بوابات دفع" }
+];
+
+const ABOUT = {
+  paragraphs: [
+    {
+      en: "I'm a backend engineer based in Mansoura, Egypt, building Laravel applications around modular, domain-driven architecture. Most of my work sits where systems fail quietly if you're not careful — payment reconciliation, real-time features, and admin dashboards that non-technical teams rely on daily.",
+      ar: "مهندس باك إند من المنصورة، بركّز في بناء تطبيقات Laravel بعمارة معيارية قائمة على Domain-Driven Design. أغلب شغلي بيكون في الأجزاء اللي بتفشل بصمت لو مش واخد بالك — تسوية المدفوعات، الميزات اللحظية، ولوحات التحكم اللي فرق كامل غير تقني بيعتمد عليها يومياً."
+    },
+    {
+      en: "I lean on AI-assisted workflows (Claude, ChatGPT, Copilot) to move faster without cutting corners on architecture, and I care about performance work that shows up in real response times, not just benchmarks.",
+      ar: "بستخدم أدوات الذكاء الاصطناعي (Claude, ChatGPT, Copilot) عشان أسرّع التسليم من غير ما أضحّي في جودة العمارة، وبهتم بشغل الأداء اللي بيبان في زمن استجابة حقيقي مش بس في benchmarks."
+    }
+  ],
+  callout_en: "Resolved performance bottlenecks — indexing, caching, and FrankenPHP — for sub-second response times.",
+  callout_ar: "حللت مشاكل أداء — indexing وcaching وFrankenPHP — عشان أوصل لزمن استجابة أقل من ثانية.",
+  callout_src_en: "— Recent backend work", callout_src_ar: "— من شغلي الأخير"
+};
+
+const SKILLS = [
+  { label_en: "Architecture", label_ar: "العمارة والتصميم", items: [
+    { en: "Domain-Driven Design", ar: "Domain-Driven Design" },
+    { en: "Clean Architecture · SOLID", ar: "Clean Architecture · SOLID" },
+    { en: "nwidart/laravel-modules", ar: "nwidart/laravel-modules" },
+    { en: "System & API design", ar: "تصميم الأنظمة والـ APIs" }
+  ]},
+  { label_en: "Frameworks", label_ar: "أطر العمل", items: [
+    { en: "Laravel · PHP", ar: "Laravel · PHP" }, { en: "Filament", ar: "Filament" }, { en: "FrankenPHP", ar: "FrankenPHP" }
+  ]},
+  { label_en: "Payments", label_ar: "بوابات الدفع", items: [
+    { en: "Paymob", ar: "Paymob" }, { en: "Tamara (BNPL)", ar: "Tamara (BNPL)" }, { en: "Moyasar", ar: "Moyasar" }
+  ]},
+  { label_en: "Real-time", label_ar: "الأنظمة اللحظية", items: [
+    { en: "Redis", ar: "Redis" }, { en: "Laravel Reverb · Pusher", ar: "Laravel Reverb · Pusher" }, { en: "WebSockets · Socket.IO", ar: "WebSockets · Socket.IO" }
+  ]},
+  { label_en: "DevOps & Infra", label_ar: "البنية التحتية", items: [
+    { en: "Linux · Nginx · Apache", ar: "Linux · Nginx · Apache" }, { en: "Supervisor · Queue workers", ar: "Supervisor · Queue workers" }, { en: "PM2", ar: "PM2" }
+  ]},
+  { label_en: "AI-assisted dev", label_ar: "تطوير بمساعدة AI", items: [
+    { en: "Claude · ChatGPT · Copilot", ar: "Claude · ChatGPT · Copilot" }, { en: "Architecture review", ar: "مراجعة العمارة" }
+  ]}
+];
+
+/* tag_en / tag_ar is free text — label it however you like:
+   "Personal project", "Freelance", "Client work", a tech stack summary, etc. */
+const PROJECTS = [
+  { title_en: "Amlak — Real Estate Platform", title_ar: "أملاك — منصة عقارية",
+    tag_en: "End-to-end real estate marketplace", tag_ar: "منصة عقارية متكاملة",
+    desc_en: "End-to-end platform connecting buyers, sellers, and companies with in-app chat and detailed property listings.",
+    desc_ar: "منصة متكاملة تربط المشترين والبائعين والشركات، بمحادثة داخل التطبيق وعروض عقارية تفصيلية.",
+    problem_en: "Multiple company and listing types needed one flexible data model.",
+    problem_ar: "احتياج نموذج بيانات مرن يستوعب أنواع شركات وعروض مختلفة.",
+    solution_en: "Scalable database structure supporting multiple company and listing types with real-time chat via WebSockets.",
+    solution_ar: "تصميم قاعدة بيانات قابلة للتوسع تدعم أنواع الشركات والعروض المختلفة، مع محادثة لحظية عبر WebSockets.",
+    stack: ["Laravel", "Filament", "WebSockets"] },
+  { title_en: "Zawada — School Canteen NFC Wallet", title_ar: "زوادة — محفظة NFC لمقاصف المدارس",
+    tag_en: "NFC-powered fintech for schools", tag_ar: "حل مالي بتقنية NFC للمدارس",
+    desc_en: "Multi-role platform connecting guardians, students, schools, and canteens through NFC-enabled wristbands and cards.",
+    desc_ar: "منصة متعددة الأدوار تربط أولياء الأمور والطلاب والمدارس والمقاصف عبر أساور وبطاقات NFC.",
+    problem_en: "Guardians needed a per-student allowance system with allergy-aware restrictions and no-balance fallback.",
+    problem_ar: "احتياج نظام مصروف لكل طالب مع قيود حساسية غذائية وخيار بديل عند عدم وجود رصيد.",
+    solution_en: "Designed the ERD and modular DDD architecture with a guardian wallet, Paymob top-ups, pre-orders, and a school credit fallback.",
+    solution_ar: "تصميم ERD وعمارة DDD معيارية تشمل محفظة لولي الأمر، شحن رصيد عبر Paymob، طلبات مسبقة، وبديل ائتمان مدرسي.",
+    stack: ["Laravel", "DDD", "Paymob", "NFC"] },
+  { title_en: "Wasil — Multi-Service Delivery Platform", title_ar: "واصل — منصة توصيل متعددة الخدمات",
+    tag_en: "Four services, one platform", tag_ar: "أربع خدمات في منصة واحدة",
+    desc_en: "Full backend and REST API from scratch supporting four independent service flows: towing, furniture delivery, general delivery, and car wash booking.",
+    desc_ar: "باك إند وREST API كامل من الصفر يدعم أربع خدمات مستقلة: سحب السيارات، توصيل الأثاث، توصيل عام، وحجز غسيل سيارات.",
+    problem_en: "Four different service flows needed to share one tracking and dispatch backbone without tangling their logic.",
+    problem_ar: "أربع خدمات مختلفة تحتاج نظام تتبع وتوزيع مشترك من غير ما يتشابك المنطق بينها.",
+    solution_en: "Real-time tracking for service requests and a full admin dashboard for managing users, orders, and providers.",
+    solution_ar: "نظام تتبع لحظي لطلبات الخدمة، ولوحة تحكم كاملة لإدارة المستخدمين والطلبات ومزودي الخدمة.",
+    stack: ["Laravel", "Redis", "Real-time tracking"] },
+  { title_en: "Bedayt Sekon — Mental Health App", title_ar: "بداية سكون — تطبيق صحة نفسية",
+    tag_en: "Therapy sessions, delivered remotely", tag_ar: "جلسات علاج نفسي عن بُعد",
+    desc_en: "End-to-end app connecting patients with therapists via real-time chat and video sessions.",
+    desc_ar: "تطبيق متكامل يربط المرضى بالمعالجين عبر جلسات محادثة وفيديو لحظية.",
+    problem_en: "Sessions needed secure payment handling tied directly to session state.",
+    problem_ar: "احتياج ربط الدفع الآمن مباشرة بحالة الجلسة.",
+    solution_en: "Integrated secure payment gateways with a complete session management system.",
+    solution_ar: "تكامل بوابات دفع آمنة مع نظام كامل لإدارة الجلسات.",
+    stack: ["Flutter", "Real-time video", "Payments"] },
+  { title_en: "Al-Shamela — Automotive Marketplace", title_ar: "الشاملة — سوق للسيارات وقطع الغيار",
+    tag_en: "Full marketplace, built solo", tag_ar: "سوق سيارات متكامل من الصفر",
+    desc_en: "Marketplace for cars, parts, accessories, and automotive services with advanced filtering.",
+    desc_ar: "سوق لبيع السيارات وقطع الغيار والإكسسوارات وخدمات السيارات، بفلترة متقدمة.",
+    problem_en: "Buyers needed to narrow large listings fast across category, price, and multiple criteria.",
+    problem_ar: "احتياج المشترين لتصفية عدد كبير من العروض بسرعة حسب الفئة والسعر ومعايير متعددة.",
+    solution_en: "Built the full admin dashboard and user-facing website end to end, with advanced filtering and detailed listing pages.",
+    solution_ar: "بناء لوحة التحكم والموقع الأمامي بالكامل من البداية للنهاية، مع فلترة متقدمة وصفحات عرض تفصيلية.",
+    stack: ["Laravel", "Blade", "MySQL"] },
+  { title_en: "Altamayuz Academy — Smart School Manager", title_ar: "أكاديمية التميز — مدير مدرسة ذكي",
+    tag_en: "School operations, simplified", tag_ar: "تبسيط العمليات المدرسية",
+    desc_en: "System simplifying school operations and communication for staff and admins.",
+    desc_ar: "نظام لتبسيط العمليات المدرسية والتواصل بين الإدارة والفريق.",
+    problem_en: "The admin dashboard needed to scale with the school's operational needs without a rebuild.",
+    problem_ar: "لوحة التحكم كانت محتاجة تتوسع مع احتياجات المدرسة التشغيلية من غير إعادة بناء.",
+    solution_en: "Built all backend APIs, updated the school website, and enhanced the admin dashboard for usability.",
+    solution_ar: "بناء جميع الـ APIs، تحديث موقع المدرسة، وتحسين لوحة التحكم من ناحية سهولة الاستخدام.",
+    stack: ["Laravel", "REST API"] }
+];
+
+const EXPERIENCE = [
+  { role_en: "Back-End Developer — Athr", role_ar: "مطور باك إند — Athr",
+    meta_en: "08/2024 – Present · New Damietta, Egypt", meta_ar: "08/2024 – حتى الآن · دمياط الجديدة",
+    desc_en: "Built modular Laravel applications using DDD and nwidart/laravel-modules. Integrated Paymob and Tamara with HMAC-verified webhooks via Filament. Built real-time features with Redis and Reverb, and resolved performance bottlenecks for sub-second response times.",
+    desc_ar: "بناء تطبيقات Laravel معيارية باستخدام DDD وnwidart/laravel-modules. تكامل مع Paymob وTamara عبر webhooks موثّقة بـ HMAC من خلال Filament. بناء ميزات لحظية باستخدام Redis وReverb، وحل مشاكل أداء للوصول لزمن استجابة أقل من الثانية." },
+  { role_en: "Software Engineer — Emcan", role_ar: "مهندس برمجيات — Emcan",
+    meta_en: "03/2024 – 08/2024 · Remote", meta_ar: "03/2024 – 08/2024 · عن بُعد",
+    desc_en: "Developed RESTful APIs for admin dashboards and frontend systems. Built delivery and order-tracking systems with real-time status workflows, and integrated Shopify and Salla.",
+    desc_ar: "تطوير RESTful APIs للوحات التحكم والأنظمة الأمامية. بناء أنظمة توصيل وتتبع طلبات بحالات لحظية، والتكامل مع Shopify وSalla." },
+  { role_en: "Laravel Back-End Developer — Online Training", role_ar: "مطور Laravel — تدريب أونلاين",
+    meta_en: "09/2023 – 12/2023 · Mansoura, Egypt", meta_ar: "09/2023 – 12/2023 · المنصورة",
+    desc_en: "Built backend services in PHP and Laravel, integrating third-party APIs and optimizing database queries within structured code reviews.",
+    desc_ar: "بناء خدمات باك إند بلغة PHP وLaravel، مع تكامل APIs خارجية وتحسين استعلامات قاعدة البيانات ضمن مراجعات كود منظمة." }
+];
+
+const EDUCATION = {
+  institute_en: "Faculty of Computer &amp; Information Science — Mansoura University",
+  institute_ar: "كلية الحاسبات والمعلومات — جامعة المنصورة",
+  meta_en: "09/2020 – 07/2024", meta_ar: "09/2020 – 07/2024",
+  desc_en: "Graduation project grade: Excellent. Cumulative grade: Very Good. Led a multidisciplinary team building a web platform connecting patients, doctors, and pharmacists.",
+  desc_ar: "تقدير مشروع التخرج: امتياز. التقدير التراكمي: جيد جداً. قاد فريق متعدد التخصصات لبناء منصة إلكترونية تربط بين المرضى والأطباء والصيادلة."
+};
+
+const CONTACT = {
+  intro_en: "Open to remote backend roles, particularly across the Gulf market. The fastest way to reach me is below.",
+  intro_ar: "متاح لفرص شغل باك إند عن بُعد، خصوصاً في سوق الخليج. أسرع طريقة توصلني بيها تحت."
+};
+
+/* ===================== render (no need to edit below) ===================== */
+
+function bilingual(en, ar){ return `<span class="en">${en}</span><span class="ar">${ar}</span>`; }
+
+document.getElementById('sbAvatarImg').alt = PROFILE.name_en;
+document.getElementById('sbName').innerHTML = bilingual(PROFILE.name_en, PROFILE.name_ar);
+document.getElementById('sbRole').innerHTML = bilingual(PROFILE.role_en, PROFILE.role_ar);
+document.getElementById('sbNav').innerHTML = NAV.map(n => `<a href="#${n.id}"><span class="n">${String(NAV.indexOf(n)+1).padStart(2,'0')}</span>${bilingual(n.en, n.ar)}</a>`).join('');
+document.getElementById('sbContact').innerHTML = `
+  <a href="mailto:${PROFILE.email}">${PROFILE.email}</a>
+  <a href="tel:${PROFILE.phone_href}">${PROFILE.phone_display}</a>
+  <a href="${PROFILE.github}">${PROFILE.github.replace('https://','')}</a>
+  <a href="${PROFILE.linkedin}">${PROFILE.linkedin.replace('https://','')}</a>
+  <a href="${PROFILE.cv_href}" download>${bilingual('Download CV ↓','تحميل السيرة الذاتية ↓')}</a>
+`;
+
+document.getElementById('heroEyebrow').innerHTML = bilingual(HERO.eyebrow_en, HERO.eyebrow_ar);
+document.getElementById('heroHeadline').innerHTML = `
+  <span class="en">${HERO.headline_before_en}<span class="accent">${HERO.headline_accent_en}</span>${HERO.headline_after_en}</span>
+  <span class="ar">${HERO.headline_before_ar}<span class="accent">${HERO.headline_accent_ar}</span>${HERO.headline_after_ar}</span>
+`;
+document.getElementById('heroLead').innerHTML = bilingual(HERO.lead_en, HERO.lead_ar);
+document.getElementById('ctaPrimary').innerHTML = bilingual(HERO.cta_primary_en, HERO.cta_primary_ar);
+document.getElementById('ctaSecondary').innerHTML = bilingual(HERO.cta_secondary_en, HERO.cta_secondary_ar);
+
+document.getElementById('aboutText').className = 'about';
+document.getElementById('aboutText').innerHTML = ABOUT.paragraphs.map(p => `<p>${bilingual(p.en, p.ar)}</p>`).join('');
+document.getElementById('calloutText').innerHTML = bilingual('“' + ABOUT.callout_en + '”', '«' + ABOUT.callout_ar + '»');
+document.getElementById('calloutSrc').innerHTML = bilingual(ABOUT.callout_src_en, ABOUT.callout_src_ar);
+
+document.getElementById('skillsContainer').innerHTML = SKILLS.map(m => `
+  <div class="skill-mod">
+    <div class="mod-label">${bilingual(m.label_en, m.label_ar)}</div>
+    <ul>${m.items.map(i => `<li>${bilingual(i.en, i.ar)}</li>`).join('')}</ul>
+  </div>
+`).join('');
+
+document.getElementById('projectsContainer').innerHTML = PROJECTS.map(p => `
+  <div class="card" tabindex="0">
+    <div class="card-head">
+      <h3>${bilingual(p.title_en, p.title_ar)}</h3>
+      <span class="card-tag">${bilingual(p.tag_en, p.tag_ar)}</span>
+    </div>
+    <p class="desc">${bilingual(p.desc_en, p.desc_ar)}</p>
+    <div class="specs">
+      <div><div class="spec-label">${bilingual('Problem','التحدي')}</div><div class="spec-val">${bilingual(p.problem_en, p.problem_ar)}</div></div>
+      <div><div class="spec-label">${bilingual('Solution','الحل')}</div><div class="spec-val">${bilingual(p.solution_en, p.solution_ar)}</div></div>
+    </div>
+    <div class="stack-tags">${p.stack.map(s => `<span>${s}</span>`).join('')}</div>
+  </div>
+`).join('');
+
+document.getElementById('experienceContainer').innerHTML = EXPERIENCE.map(x => `
+  <div class="xp-card">
+    <div class="tl-role">${bilingual(x.role_en, x.role_ar)}</div>
+    <div class="tl-meta">${bilingual(x.meta_en, x.meta_ar)}</div>
+    <div class="tl-desc">${bilingual(x.desc_en, x.desc_ar)}</div>
+  </div>
+`).join('');
+
+document.getElementById('eduContainer').innerHTML = `
+  <div class="xp-card">
+    <div class="tl-role">${bilingual(EDUCATION.institute_en, EDUCATION.institute_ar)}</div>
+    <div class="tl-meta">${bilingual(EDUCATION.meta_en, EDUCATION.meta_ar)}</div>
+    <div class="tl-desc">${bilingual(EDUCATION.desc_en, EDUCATION.desc_ar)}</div>
+  </div>
+`;
+
+document.getElementById('contactIntro').innerHTML = bilingual(CONTACT.intro_en, CONTACT.intro_ar);
+document.getElementById('contactLinks').innerHTML = `
+  <a href="mailto:${PROFILE.email}" class="btn btn-primary">${PROFILE.email}</a>
+  <a href="tel:${PROFILE.phone_href}" class="btn btn-ghost">${PROFILE.phone_display}</a>
+  <a href="${PROFILE.github}" class="btn btn-ghost">GitHub ↗</a>
+  <a href="${PROFILE.linkedin}" class="btn btn-ghost">LinkedIn ↗</a>
+  <a href="${PROFILE.cv_href}" download class="btn btn-ghost">${bilingual('Download CV ↓','تحميل السيرة الذاتية ↓')}</a>
+`;
+
+const langToggle = document.getElementById('langToggle');
+langToggle.addEventListener('click', () => {
+  const isAr = document.body.classList.toggle('lang-ar');
+  document.body.classList.toggle('lang-en', !isAr);
+  document.documentElement.lang = isAr ? 'ar' : 'en';
+  document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+  langToggle.textContent = isAr ? 'English' : 'العربية';
+});
+</script>
+
+</body>
+</html>
