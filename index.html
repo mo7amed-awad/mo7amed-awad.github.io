@@ -369,12 +369,8 @@ const SKILLS = [
 const PROJECTS = [
   { title_en: "Altamayuz Academy — School Management Platform", title_ar: "أكاديمية التميز — منصة إدارة مدرسية",
     tag_en: "School operations, simplified", tag_ar: "تبسيط العمليات المدرسية",
-    desc_en: "Full school management platform covering classes, students, homework, grading, exams, and class schedules.",
-    desc_ar: "منصة إدارة مدرسية متكاملة تغطي الفصول، الطلاب، الواجبات، التصحيح، الامتحانات، والحصص الدراسية.",
-    problem_en: "Staff needed one system to manage classes, students, homework, grading, and exams instead of juggling scattered tools.",
-    problem_ar: "الإدارة كانت محتاجة نظام واحد يدير الفصول والطلاب والواجبات والتصحيح والامتحانات بدل أدوات متفرقة.",
-    solution_en: "Built all backend APIs, the school website, and a mobile app covering classes, assignments, grading, and exams end to end.",
-    solution_ar: "بناء جميع الـ APIs، موقع المدرسة، وتطبيق موبايل يغطي الفصول والواجبات والتصحيح والامتحانات بالكامل.",
+    desc_en: "Full school management platform covering classes, students, homework, grading, exams, and class schedules — backend APIs, website, and mobile app built end to end.",
+    desc_ar: "منصة إدارة مدرسية متكاملة تغطي الفصول، الطلاب، الواجبات، التصحيح، الامتحانات، والحصص الدراسية — الـ APIs والموقع والتطبيق مبنيين بالكامل.",
     stack: ["Laravel", "REST API"],
     links: { website: "https://www.ato-academy.com/", ios: "https://apps.apple.com/eg/app/altmayouz/id6745446952" } },
   { title_en: "Amlak — Real Estate Platform", title_ar: "أملاك — منصة عقارية",
@@ -406,12 +402,8 @@ const PROJECTS = [
     stack: ["Laravel", "Redis", "Real-time tracking"] },
   { title_en: "Bedayt Sekon — Mental Health App", title_ar: "بداية سكون — تطبيق صحة نفسية",
     tag_en: "Therapy sessions, delivered remotely", tag_ar: "جلسات علاج نفسي عن بُعد",
-    desc_en: "End-to-end app connecting patients with therapists via real-time chat and video sessions.",
-    desc_ar: "تطبيق متكامل يربط المرضى بالمعالجين عبر جلسات محادثة وفيديو لحظية.",
-    problem_en: "Sessions needed secure payment handling tied directly to session state.",
-    problem_ar: "احتياج ربط الدفع الآمن مباشرة بحالة الجلسة.",
-    solution_en: "Integrated secure payment gateways with a complete session management system.",
-    solution_ar: "تكامل بوابات دفع آمنة مع نظام كامل لإدارة الجلسات.",
+    desc_en: "End-to-end app connecting patients with therapists via real-time chat and video sessions, with secure payments tied to each session.",
+    desc_ar: "تطبيق متكامل يربط المرضى بالمعالجين عبر جلسات محادثة وفيديو لحظية، مع دفع آمن مرتبط بكل جلسة.",
     stack: ["Flutter", "Real-time video", "Payments"] },
   { title_en: "Al-Shamela — Automotive Marketplace", title_ar: "الشاملة — سوق للسيارات وقطع الغيار",
     tag_en: "Full marketplace, built solo", tag_ar: "سوق سيارات متكامل من الصفر",
@@ -505,10 +497,11 @@ document.getElementById('projectsContainer').innerHTML = PROJECTS.map(p => `
       <span class="card-tag">${bilingual(p.tag_en, p.tag_ar)}</span>
     </div>
     <p class="desc">${bilingual(p.desc_en, p.desc_ar)}</p>
+    ${p.problem_en ? `
     <div class="specs">
       <div><div class="spec-label">${bilingual('Problem','التحدي')}</div><div class="spec-val">${bilingual(p.problem_en, p.problem_ar)}</div></div>
       <div><div class="spec-label">${bilingual('Solution','الحل')}</div><div class="spec-val">${bilingual(p.solution_en, p.solution_ar)}</div></div>
-    </div>
+    </div>` : ''}
     <div class="stack-tags">${p.stack.map(s => `<span>${s}</span>`).join('')}</div>
     ${projectLinks(p.links)}
   </div>
