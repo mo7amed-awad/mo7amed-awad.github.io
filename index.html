@@ -176,6 +176,11 @@
   .stack-tags span{font-family:var(--mono);font-size:10.5px;color:var(--accent-1);background:rgba(110,139,255,.1);padding:3px 9px;border-radius:4px;border:1px solid rgba(110,139,255,.2);}
   body.lang-ar .stack-tags span{font-family:var(--arabic);}
 
+  .card-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
+  .card-links a{font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--ink);background:rgba(255,255,255,.04);border:1px solid var(--line-strong);padding:6px 13px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;transition:border-color .15s,color .15s;}
+  .card-links a:hover{border-color:var(--accent-1);color:var(--accent-1);}
+  body.lang-ar .card-links a{font-family:var(--arabic);}
+
   #experienceContainer{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
   .xp-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-inline-start:3px solid var(--accent-1);border-radius:var(--radius);padding:20px 22px;}
   .tl-role{font-family:var(--display);font-size:16.5px;font-weight:600;color:#fff;}
@@ -246,7 +251,7 @@
     </section>
 
     <section id="work" class="wrap">
-      <h2><span class="idx">03</span><span class="en">Selected work</span><span class="ar">مشاريع مختارة</span></h2>
+      <h2><span class="idx">03</span><span class="en">Selected projects</span><span class="ar">مشاريع مختارة</span></h2>
       <div id="projectsContainer"></div>
     </section>
 
@@ -295,7 +300,7 @@ const PROFILE = {
 const NAV = [
   { id: "about", en: "About", ar: "نبذة" },
   { id: "skills", en: "Skills", ar: "المهارات" },
-  { id: "work", en: "Work", ar: "المشاريع" },
+  { id: "work", en: "Projects", ar: "المشاريع" },
   { id: "experience", en: "Experience", ar: "الخبرة" },
   { id: "education", en: "Education", ar: "التعليم" },
   { id: "contact", en: "Contact", ar: "تواصل" }
@@ -362,6 +367,16 @@ const SKILLS = [
 /* tag_en / tag_ar is free text — label it however you like:
    "Personal project", "Freelance", "Client work", a tech stack summary, etc. */
 const PROJECTS = [
+  { title_en: "Altamayuz Academy — School Management Platform", title_ar: "أكاديمية التميز — منصة إدارة مدرسية",
+    tag_en: "School operations, simplified", tag_ar: "تبسيط العمليات المدرسية",
+    desc_en: "Full school management platform covering classes, students, homework, grading, exams, and class schedules.",
+    desc_ar: "منصة إدارة مدرسية متكاملة تغطي الفصول، الطلاب، الواجبات، التصحيح، الامتحانات، والحصص الدراسية.",
+    problem_en: "Staff needed one system to manage classes, students, homework, grading, and exams instead of juggling scattered tools.",
+    problem_ar: "الإدارة كانت محتاجة نظام واحد يدير الفصول والطلاب والواجبات والتصحيح والامتحانات بدل أدوات متفرقة.",
+    solution_en: "Built all backend APIs, the school website, and a mobile app covering classes, assignments, grading, and exams end to end.",
+    solution_ar: "بناء جميع الـ APIs، موقع المدرسة، وتطبيق موبايل يغطي الفصول والواجبات والتصحيح والامتحانات بالكامل.",
+    stack: ["Laravel", "REST API"],
+    links: { website: "https://www.ato-academy.com/", ios: "https://apps.apple.com/eg/app/altmayouz/id6745446952" } },
   { title_en: "Amlak — Real Estate Platform", title_ar: "أملاك — منصة عقارية",
     tag_en: "End-to-end real estate marketplace", tag_ar: "منصة عقارية متكاملة",
     desc_en: "End-to-end platform connecting buyers, sellers, and companies with in-app chat and detailed property listings.",
@@ -406,16 +421,7 @@ const PROJECTS = [
     problem_ar: "احتياج المشترين لتصفية عدد كبير من العروض بسرعة حسب الفئة والسعر ومعايير متعددة.",
     solution_en: "Built the full admin dashboard and user-facing website end to end, with advanced filtering and detailed listing pages.",
     solution_ar: "بناء لوحة التحكم والموقع الأمامي بالكامل من البداية للنهاية، مع فلترة متقدمة وصفحات عرض تفصيلية.",
-    stack: ["Laravel", "Blade", "MySQL"] },
-  { title_en: "Altamayuz Academy — Smart School Manager", title_ar: "أكاديمية التميز — مدير مدرسة ذكي",
-    tag_en: "School operations, simplified", tag_ar: "تبسيط العمليات المدرسية",
-    desc_en: "System simplifying school operations and communication for staff and admins.",
-    desc_ar: "نظام لتبسيط العمليات المدرسية والتواصل بين الإدارة والفريق.",
-    problem_en: "The admin dashboard needed to scale with the school's operational needs without a rebuild.",
-    problem_ar: "لوحة التحكم كانت محتاجة تتوسع مع احتياجات المدرسة التشغيلية من غير إعادة بناء.",
-    solution_en: "Built all backend APIs, updated the school website, and enhanced the admin dashboard for usability.",
-    solution_ar: "بناء جميع الـ APIs، تحديث موقع المدرسة، وتحسين لوحة التحكم من ناحية سهولة الاستخدام.",
-    stack: ["Laravel", "REST API"] }
+    stack: ["Laravel", "Blade", "MySQL"] }
 ];
 
 const EXPERIENCE = [
@@ -483,8 +489,17 @@ document.getElementById('skillsContainer').innerHTML = SKILLS.map(m => `
   </div>
 `).join('');
 
+function projectLinks(links){
+  if (!links) return '';
+  const items = [];
+  if (links.website) items.push(`<a href="${links.website}" target="_blank" rel="noopener">${bilingual('Website ↗','الموقع ↗')}</a>`);
+  if (links.ios) items.push(`<a href="${links.ios}" target="_blank" rel="noopener">App Store ↗</a>`);
+  if (links.android) items.push(`<a href="${links.android}" target="_blank" rel="noopener">Google Play ↗</a>`);
+  return items.length ? `<div class="card-links">${items.join('')}</div>` : '';
+}
+
 document.getElementById('projectsContainer').innerHTML = PROJECTS.map(p => `
-  <div class="card" tabindex="0">
+  <div class="card">
     <div class="card-head">
       <h3>${bilingual(p.title_en, p.title_ar)}</h3>
       <span class="card-tag">${bilingual(p.tag_en, p.tag_ar)}</span>
@@ -495,6 +510,7 @@ document.getElementById('projectsContainer').innerHTML = PROJECTS.map(p => `
       <div><div class="spec-label">${bilingual('Solution','الحل')}</div><div class="spec-val">${bilingual(p.solution_en, p.solution_ar)}</div></div>
     </div>
     <div class="stack-tags">${p.stack.map(s => `<span>${s}</span>`).join('')}</div>
+    ${projectLinks(p.links)}
   </div>
 `).join('');
 
