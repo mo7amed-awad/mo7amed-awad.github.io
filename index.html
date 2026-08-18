@@ -181,6 +181,18 @@
   .card-links a:hover{border-color:var(--accent-1);color:var(--accent-1);}
   body.lang-ar .card-links a{font-family:var(--arabic);}
 
+  .more-projects-head{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:40px 0 16px;padding-top:32px;border-top:1px solid var(--line);}
+  body.lang-ar .more-projects-head{font-family:var(--arabic);letter-spacing:0;font-weight:700;text-transform:none;}
+  .more-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;}
+  .more-item{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+  .more-item .mi-title{font-family:var(--display);font-size:14.5px;font-weight:600;color:#fff;margin-bottom:5px;}
+  body.lang-ar .more-item .mi-title{font-family:var(--arabic);font-weight:800;}
+  .more-item .mi-desc{font-size:12.5px;color:var(--muted);margin-bottom:10px;}
+  .more-item .mi-links{display:flex;flex-wrap:wrap;gap:12px;}
+  .more-item .mi-links a{font-family:var(--mono);font-size:11px;color:var(--accent-1);}
+  .more-item .mi-links a:hover{text-decoration:underline;}
+  body.lang-ar .more-item .mi-links a{font-family:var(--arabic);}
+
   #experienceContainer{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
   .xp-card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-inline-start:3px solid var(--accent-1);border-radius:var(--radius);padding:20px 22px;}
   .tl-role{font-family:var(--display);font-size:16.5px;font-weight:600;color:#fff;}
@@ -253,6 +265,8 @@
     <section id="work" class="wrap">
       <h2><span class="idx">03</span><span class="en">Selected projects</span><span class="ar">مشاريع مختارة</span></h2>
       <div id="projectsContainer"></div>
+      <div class="more-projects-head"><span class="en">More projects</span><span class="ar">مشاريع إضافية</span></div>
+      <div class="more-grid" id="moreProjectsContainer"></div>
     </section>
 
     <section id="experience" class="wrap">
@@ -319,9 +333,9 @@ const HERO = {
 
 const STATS = [
   { num: "3+", label_en: "Years experience", label_ar: "سنين خبرة" },
-  { num: "6", label_en: "Shipped projects", label_ar: "مشاريع منفّذة" },
-  { num: "4", label_en: "Domains covered", label_ar: "مجالات مختلفة" },
-  { num: "3", label_en: "Payment gateways", label_ar: "بوابات دفع" }
+  { num: "16", label_en: "Shipped projects", label_ar: "مشاريع منفّذة" },
+  { num: "8+", label_en: "Domains covered", label_ar: "مجالات مختلفة" },
+  { num: "4", label_en: "Payment gateways", label_ar: "بوابات دفع" }
 ];
 
 const ABOUT = {
@@ -367,12 +381,62 @@ const SKILLS = [
 /* tag_en / tag_ar is free text — label it however you like:
    "Personal project", "Freelance", "Client work", a tech stack summary, etc. */
 const PROJECTS = [
-  { title_en: "Altamayuz Academy — School Management Platform", title_ar: "أكاديمية التميز — منصة إدارة مدرسية",
-    tag_en: "School operations, simplified", tag_ar: "تبسيط العمليات المدرسية",
-    desc_en: "Full school management platform covering classes, students, homework, grading, exams, and class schedules — backend APIs, website, and mobile app built end to end.",
-    desc_ar: "منصة إدارة مدرسية متكاملة تغطي الفصول، الطلاب، الواجبات، التصحيح، الامتحانات، والحصص الدراسية — الـ APIs والموقع والتطبيق مبنيين بالكامل.",
-    stack: ["Laravel", "REST API"],
-    links: { website: "https://www.ato-academy.com/", ios: "https://apps.apple.com/eg/app/altmayouz/id6745446952" } },
+  { title_en: "Tijora — Multi-Tenant E-Commerce & SMM SaaS", title_ar: "تجورة — منصة SaaS تجارة إلكترونية وSMM متعددة المستأجرين",
+    tag_en: "Automated multi-tenant infrastructure", tag_ar: "بنية تحتية آلية متعددة المستأجرين",
+    desc_en: "Multi-tenant SaaS merging an e-commerce storefront with an SMM panel — each workspace gets an isolated database and its own custom domain.",
+    desc_ar: "منصة SaaS متعددة المستأجرين تجمع بين متجر إلكتروني ولوحة SMM — كل مساحة عمل (workspace) بقاعدة بيانات معزولة ودومين مخصص خاص بيها.",
+    problem_en: "Each tenant needed a fully isolated environment — its own database and custom domain — provisioned automatically, instead of turning infrastructure setup into manual per-customer work.",
+    problem_ar: "كل عميل (tenant) محتاج بيئة معزولة بالكامل — قاعدة بيانات ودومين مخصص — تتجهز أوتوماتيك، من غير ما إعداد البنية التحتية يبقى شغل يدوي لكل عميل.",
+    solution_en: "Built automated per-tenant infrastructure lifecycle management (Laravel + stancl/tenancy) — DNS zone provisioning, SSL issuance/renewal, and reverse-proxy configuration through a queued pipeline (provision → verify → health-check → renew → suspend → rollback). Across 10 business modules (~640 PHP files), it also handles multi-gateway payments, subscription billing, OAuth2 auth with 2FA, and an automated coupon/campaign engine.",
+    solution_ar: "بناء إدارة آلية كاملة لدورة حياة البنية التحتية لكل عميل (Laravel + stancl/tenancy) — تجهيز DNS، إصدار وتجديد شهادات SSL، وإعداد reverse-proxy عبر قايمة مهام (provision → verify → health-check → renew → suspend → rollback). عبر 10 موديولات (~640 ملف PHP)، بيغطي كمان مدفوعات متعددة البوابات، فوترة اشتراكات، مصادقة OAuth2 مع 2FA، ومحرك كوبونات وحملات آلي.",
+    stack: ["Laravel", "stancl/tenancy", "Laravel Passport", "Multi-tenant SaaS"] },
+  { title_en: "Fixon — Car Service & Maintenance Booking Platform", title_ar: "Fixon — منصة حجز خدمات وصيانة السيارات",
+    tag_en: "AI-assisted car service booking", tag_ar: "حجز خدمات سيارات بمساعدة الذكاء الاصطناعي",
+    desc_en: "Backend and REST API powering separate client and mechanic apps for car service booking, structured vehicle inspection reports, and an AI car advisor chatbot.",
+    desc_ar: "باك إند وREST API يشغّل تطبيقين منفصلين للعميل والفني لحجز خدمات السيارات، تقارير فحص سيارة منظمة، وشات بوت استشاري بالذكاء الاصطناعي.",
+    problem_en: "Clients and mechanics needed separate apps sharing one booking system, with structured vehicle inspection data mechanics could fill out in the field.",
+    problem_ar: "العملاء والفنيين محتاجين تطبيقات منفصلة تشترك في نظام حجز واحد، مع بيانات فحص سيارة منظمة يقدر الفني يملاها ميدانيًا.",
+    solution_en: "Built a full REST API with multi-method auth (OTP, social login) via Laravel Sanctum, a dynamic vehicle inspection module with admin-configurable fields, Firebase push notifications, and a Google Gemini-powered in-app car advisor chatbot.",
+    solution_ar: "بناء REST API كامل بمصادقة متعددة الطرق (OTP، تسجيل دخول اجتماعي) عبر Laravel Sanctum، وحدة فحص سيارة ديناميكية بحقول قابلة للتخصيص من لوحة التحكم، إشعارات Firebase، وشات بوت استشاري سيارات مدعوم بـ Google Gemini.",
+    stack: ["Laravel 12", "Filament", "Google Gemini AI", "Firebase"] },
+  { title_en: "Al-Mithan — Home Services SaaS Marketplace", title_ar: "الميثان — منصة SaaS لخدمات منزلية",
+    tag_en: "Modular multi-service SaaS", tag_ar: "منصة SaaS معيارية متعددة الخدمات",
+    desc_en: "SaaS marketplace connecting home service providers with clients — booking, wallets, and a full admin dashboard, split into 15+ independent modules.",
+    desc_ar: "سوق SaaS يربط مقدمي الخدمات المنزلية بالعملاء — حجوزات، محافظ إلكترونية، ولوحة تحكم كاملة، مقسّمة على أكتر من 15 موديول مستقل.",
+    problem_en: "The platform needed to support hourly-to-monthly service bookings, mixed cash/wallet/gateway payments, and multi-language content — while keeping 15+ business domains independently maintainable.",
+    problem_ar: "المنصة محتاجة تدعم حجوزات من الساعة للشهر، مدفوعات مختلطة (كاش/محفظة/بوابة دفع)، ومحتوى متعدد اللغات — مع الحفاظ على أكتر من 15 مجال عمل قابل للصيانة بشكل مستقل.",
+    solution_en: "Built a modular Laravel 13 architecture (nwidart/laravel-modules) with an availability engine (hour/day/week/month), a Paymob + wallet payment system with full transaction history, spatie/laravel-translatable content, and a Filament 5 admin covering the entire platform.",
+    solution_ar: "بناء عمارة Laravel 13 معيارية (nwidart/laravel-modules) بمحرك توافر (ساعة/يوم/أسبوع/شهر)، نظام دفع Paymob + محفظة بسجل معاملات كامل، محتوى متعدد اللغات عبر spatie/laravel-translatable، ولوحة تحكم Filament 5 تدير المنصة بالكامل.",
+    stack: ["Laravel 13", "Filament 5", "Laravel Sanctum", "Paymob"] },
+  { title_en: "Zawada — School Canteen NFC Wallet", title_ar: "زوادة — محفظة NFC لمقاصف المدارس",
+    tag_en: "NFC-powered fintech for schools", tag_ar: "حل مالي بتقنية NFC للمدارس",
+    desc_en: "Multi-role platform connecting guardians, students, schools, and canteens through NFC-enabled wristbands and cards.",
+    desc_ar: "منصة متعددة الأدوار تربط أولياء الأمور والطلاب والمدارس والمقاصف عبر أساور وبطاقات NFC.",
+    problem_en: "Schools needed one system to manage per-student allowances with daily spending limits and allergy-aware restrictions, full NFC wristband/card lifecycle, and a pre-order-to-POS flow with accurate fund attribution — across multiple schools and canteen branches.",
+    problem_ar: "المدارس كانت محتاجة نظام واحد يدير مصروف كل طالب بحدود إنفاق يومية وقيود حساسية غذائية، ودورة حياة كاملة لأساور وبطاقات NFC، وتدفق من الطلب المسبق لنقطة البيع بتوزيع دقيق للتمويل — عبر مدارس وفروع مقاصف متعددة.",
+    solution_en: "Designed the ERD and a modular DDD architecture (8+ bounded contexts: Identity, Child, Order, Product, Device, Otp, Admin) with a dual-wallet system — a parent wallet funding per-student prepaid allowances — Paymob-integrated top-ups, full NFC device lifecycle management, a pre-order/POS flow with per-line funding attribution and transaction reversal, and a Filament-based Arabic RTL admin dashboard.",
+    solution_ar: "تصميم ERD وعمارة DDD معيارية (8+ bounded contexts: Identity, Child, Order, Product, Device, Otp, Admin) بنظام محفظة مزدوج — محفظة ولي الأمر بتموّل مصروف مسبق الدفع لكل طالب — شحن رصيد عبر Paymob، إدارة كاملة لدورة حياة أجهزة NFC، تدفق طلب مسبق ونقطة بيع بتوزيع تمويل دقيق وعكس المعاملات، ولوحة تحكم Filament بالعربي RTL.",
+    stack: ["Laravel", "DDD", "Paymob", "NFC", "Filament"] },
+  { title_en: "Liftr — Gym Management SaaS Platform", title_ar: "Liftr — منصة SaaS لإدارة الأندية الرياضية",
+    tag_en: "Multi-gateway gym SaaS", tag_ar: "منصة أندية رياضية متعددة بوابات الدفع",
+    desc_en: "Modular Laravel platform for gyms: member workout and nutrition tracking, subscription payments, and a full admin dashboard for gym staff.",
+    desc_ar: "منصة Laravel معيارية للأندية الرياضية: متابعة تمارين وتغذية للأعضاء، مدفوعات اشتراكات، ولوحة تحكم كاملة لفريق النادي.",
+    problem_en: "Gyms needed one platform handling member subscriptions across multiple payment gateways, personalized workout/nutrition plans, and real-time engagement — without collapsing it all into one tangled system.",
+    problem_ar: "الأندية كانت محتاجة منصة واحدة تدير اشتراكات الأعضاء عبر بوابات دفع متعددة، وخطط تمارين وتغذية شخصية، وتفاعل لحظي، من غير ما يتلخبط كل ده في نظام واحد متشابك.",
+    solution_en: "Built a modular Laravel architecture (nwidart/laravel-modules) with HMAC-verified webhooks across Moyasar, Tamara, and Tabby, Firebase push notifications for real-time engagement, and a Filament admin covering users, plans, and a translatable CMS.",
+    solution_ar: "بناء عمارة Laravel معيارية (nwidart/laravel-modules) مع webhooks موثّقة عبر Moyasar وTamara وTabby، وإشعارات Firebase للتفاعل اللحظي، ولوحة تحكم Filament تدير المستخدمين والخطط ونظام CMS متعدد اللغات.",
+    stack: ["Laravel 13", "Filament", "REST API", "Firebase"],
+    links: { website: "https://liftrsa.com/", ios: "https://apps.apple.com/eg/app/liftr-sa/id6762537565" } },
+  { title_en: "Rent Car — Two-Sided Car Rental Marketplace", title_ar: "Rent Car — منصة تأجير سيارات ثنائية الأطراف",
+    tag_en: "Renters + rental office marketplace", tag_ar: "منصة تربط المستأجرين بمكاتب التأجير",
+    desc_en: "Marketplace connecting renters with car rental offices — browse and filter offices and cars, book, and manage everything from a separate provider dashboard.",
+    desc_ar: "منصة تربط المستأجرين بمكاتب تأجير السيارات — تصفح وفلترة المكاتب والسيارات، حجز، وإدارة كل حاجة من داش بورد مقدم خدمة منفصل.",
+    problem_en: "Renters needed to filter providers and cars and book directly, while rental offices needed a separate portal to list cars and accept or reject requests.",
+    problem_ar: "المستأجرين محتاجين يفلتروا مقدمي الخدمة والسيارات ويحجزوا مباشرة، ومكاتب التأجير محتاجة بوابة منفصلة تضيف سياراتها وتقبل أو ترفض الطلبات.",
+    solution_en: "Built the client-facing app and REST API in Laravel, plus a separate Vue-based provider dashboard for managing cars, availability, and incoming booking requests.",
+    solution_ar: "بناء تطبيق العميل وREST API بلغة Laravel، بالإضافة لداش بورد منفصل لمقدم الخدمة مبني بـ Vue لإدارة السيارات والتوافر وطلبات الحجز الواردة.",
+    stack: ["Laravel", "Vue", "REST API"],
+    links: { website: "https://rentcarsa.com/", ios: "https://apps.apple.com/eg/app/rent-car-%D8%B1%D9%86%D8%AA-%D9%83%D8%A7%D8%B1/id6754994991?l=ar", android: "https://play.google.com/store/apps/details?id=com.rent.car" } },
   { title_en: "Amlak — Real Estate Platform", title_ar: "أملاك — منصة عقارية",
     tag_en: "End-to-end real estate marketplace", tag_ar: "منصة عقارية متكاملة",
     desc_en: "End-to-end platform connecting buyers, sellers, and companies with in-app chat and detailed property listings.",
@@ -383,15 +447,6 @@ const PROJECTS = [
     solution_ar: "تصميم قاعدة بيانات قابلة للتوسع تدعم أنواع الشركات والعروض المختلفة، مع محادثة لحظية عبر WebSockets.",
     stack: ["Laravel", "Filament", "WebSockets"],
     links: { website: "https://amlakmap.com/", ios: "https://apps.apple.com/eg/app/amlak-app/id6749163958", android: "https://play.google.com/store/apps/details?id=com.ezdhar.amlak&hl=ar" } },
-  { title_en: "Zawada — School Canteen NFC Wallet", title_ar: "زوادة — محفظة NFC لمقاصف المدارس",
-    tag_en: "NFC-powered fintech for schools", tag_ar: "حل مالي بتقنية NFC للمدارس",
-    desc_en: "Multi-role platform connecting guardians, students, schools, and canteens through NFC-enabled wristbands and cards.",
-    desc_ar: "منصة متعددة الأدوار تربط أولياء الأمور والطلاب والمدارس والمقاصف عبر أساور وبطاقات NFC.",
-    problem_en: "Guardians needed a per-student allowance system with allergy-aware restrictions and no-balance fallback.",
-    problem_ar: "احتياج نظام مصروف لكل طالب مع قيود حساسية غذائية وخيار بديل عند عدم وجود رصيد.",
-    solution_en: "Designed the ERD and modular DDD architecture with a guardian wallet, Paymob top-ups, pre-orders, and a school credit fallback.",
-    solution_ar: "تصميم ERD وعمارة DDD معيارية تشمل محفظة لولي الأمر، شحن رصيد عبر Paymob، طلبات مسبقة، وبديل ائتمان مدرسي.",
-    stack: ["Laravel", "DDD", "Paymob", "NFC"] },
   { title_en: "Wasil — Multi-Service Delivery Platform", title_ar: "واصل — منصة توصيل متعددة الخدمات",
     tag_en: "Four services, one platform", tag_ar: "أربع خدمات في منصة واحدة",
     desc_en: "Full backend and REST API from scratch supporting four independent service flows: towing, furniture delivery, general delivery, and car wash booking.",
@@ -401,29 +456,42 @@ const PROJECTS = [
     solution_en: "Real-time tracking for service requests and a full admin dashboard for managing users, orders, and providers.",
     solution_ar: "نظام تتبع لحظي لطلبات الخدمة، ولوحة تحكم كاملة لإدارة المستخدمين والطلبات ومزودي الخدمة.",
     stack: ["Laravel", "Redis", "Real-time tracking"],
-    links: { ios: "https://apps.apple.com/eg/app/wasil-app/id6758529279", android: "https://play.google.com/store/apps/details?id=com.emcan.wasil" } },
-  { title_en: "Bedayt Sekon — Mental Health App", title_ar: "بداية سكون — تطبيق صحة نفسية",
-    tag_en: "Therapy sessions, delivered remotely", tag_ar: "جلسات علاج نفسي عن بُعد",
-    desc_en: "End-to-end app connecting patients with therapists via real-time chat and video sessions, with secure payments tied to each session.",
-    desc_ar: "تطبيق متكامل يربط المرضى بالمعالجين عبر جلسات محادثة وفيديو لحظية، مع دفع آمن مرتبط بكل جلسة.",
-    stack: ["Flutter", "Real-time video", "Payments"],
-    links: { website: "https://bedayt-alskon.com/", ios: "https://apps.apple.com/app/bedayatalskon", android: "https://play.google.com/store/apps/details?id=com.bedayt.sekon" } },
+    links: { ios: "https://apps.apple.com/eg/app/wasil-app/id6758529279", android: "https://play.google.com/store/apps/details?id=com.emcan.wasil" } }
+];
+
+const MORE_PROJECTS = [
+  { title_en: "Altamayuz Academy — School Management Platform", title_ar: "أكاديمية التميز — منصة إدارة مدرسية",
+    desc_en: "Classes, students, homework, grading, and exams — backend, website, and mobile app built end to end.",
+    desc_ar: "فصول، طلاب، واجبات، تصحيح، وامتحانات — الـ APIs والموقع والتطبيق مبنيين بالكامل.",
+    links: { website: "https://www.ato-academy.com/", ios: "https://apps.apple.com/eg/app/altmayouz/id6745446952" } },
   { title_en: "Al-Shamela — Automotive Marketplace", title_ar: "الشاملة — سوق للسيارات وقطع الغيار",
-    tag_en: "Full marketplace, built solo", tag_ar: "سوق سيارات متكامل من الصفر",
     desc_en: "Marketplace for cars, parts, accessories, and automotive services with advanced filtering.",
     desc_ar: "سوق لبيع السيارات وقطع الغيار والإكسسوارات وخدمات السيارات، بفلترة متقدمة.",
-    problem_en: "Buyers needed to narrow large listings fast across category, price, and multiple criteria.",
-    problem_ar: "احتياج المشترين لتصفية عدد كبير من العروض بسرعة حسب الفئة والسعر ومعايير متعددة.",
-    solution_en: "Built the full admin dashboard and user-facing website end to end, with advanced filtering and detailed listing pages.",
-    solution_ar: "بناء لوحة التحكم والموقع الأمامي بالكامل من البداية للنهاية، مع فلترة متقدمة وصفحات عرض تفصيلية.",
-    stack: ["Laravel", "Blade", "MySQL"],
     links: { website: "https://syaratbh.com/ar" } },
-  { title_en: "Liftr — Gym & Fitness Tracking Platform", title_ar: "Liftr — منصة متابعة الجيم واللياقة",
-    tag_en: "Workouts, nutrition, all in one", tag_ar: "تمارين وتغذية في منصة واحدة",
-    desc_en: "Platform for gym-goers to track workouts, nutrition plans, and overall fitness progress.",
-    desc_ar: "منصة لمرتادي الجيم لمتابعة التمارين وخطط التغذية والتقدم في اللياقة البدنية.",
-    stack: ["Laravel", "HTML", "CSS", "JavaScript"],
-    links: { website: "https://liftrsa.com/", ios: "https://apps.apple.com/eg/app/liftr-sa/id6762537565" } }
+  { title_en: "Bedayt Sekon — Mental Health App", title_ar: "بداية سكون — تطبيق صحة نفسية",
+    desc_en: "Patients and therapists connect via real-time chat, video sessions, and secure payments.",
+    desc_ar: "المرضى والمعالجين بيتواصلوا عبر محادثة وفيديو لحظي، مع دفع آمن.",
+    links: { website: "https://bedayt-alskon.com/", ios: "https://apps.apple.com/app/bedayatalskon", android: "https://play.google.com/store/apps/details?id=com.bedayt.sekon" } },
+  { title_en: "Thoud — Camel Trade & Auction Marketplace", title_ar: "ذود — سوق تجارة ومزادات الإبل",
+    desc_en: "Marketplace for camels, feed, and transport, with auctions and advanced filtering.",
+    desc_ar: "سوق لتجارة الإبل والأعلاف ووسائل النقل، بمزادات وفلترة متقدمة.",
+    links: { website: "https://thoud.net/", ios: "https://apps.apple.com/eg/app/thoud-%D8%B0%D9%88%D8%AF/id6752337200", android: "https://play.google.com/store/apps/details?id=com.moltaqa.thoud" } },
+  { title_en: "Mehna — Services Marketplace", title_ar: "مهنة — سوق خدمات",
+    desc_en: "Connects service providers (plumbers, painters, and more) with clients through search and filtering.",
+    desc_ar: "بيربط مقدمي الخدمات (سباك، نقاش، وغيرهم) بالعملاء عبر بحث وفلترة.",
+    links: { website: "https://mehnaa.com/", ios: "https://apps.apple.com/us/app/%D9%85%D9%87%D9%86%D9%87/id6755780905", android: "https://play.google.com/store/apps/details?id=com.ssh.mehnaah" } },
+  { title_en: "Naqla — On-Demand Cargo Delivery", title_ar: "نقلة — توصيل بضائع عند الطلب",
+    desc_en: "Requests goods transport and routes it to the nearest driver to accept or decline.",
+    desc_ar: "بيطلب نقل بضاعة ويوجه الطلب لأقرب سواق يقبل أو يرفض.",
+    links: { ios: "https://apps.apple.com/eg/app/naqla-%D9%86%D9%82%D9%84%D8%A9/id6756316634", android: "https://play.google.com/store/apps/details?id=com.moltaqa.naqla" } },
+  { title_en: "Trend Home — Furniture Shopping App", title_ar: "تريند هوم — تطبيق تسوق أثاث",
+    desc_en: "Browse furniture by color and size with advanced filtering.",
+    desc_ar: "تصفح الأثاث حسب اللون والمقاس بفلترة متقدمة.",
+    links: { ios: "https://apps.apple.com/eg/app/trend-home-%D8%AA%D8%B1%D9%8A%D9%86%D8%AF-%D9%87%D9%88%D9%85/id6754556719?l=ar" } },
+  { title_en: "HTIC — Company Showcase Website", title_ar: "HTIC — موقع عرض منتجات شركة",
+    desc_en: "Simple website showcasing a company's products.",
+    desc_ar: "موقع بسيط لعرض منتجات شركة.",
+    links: { website: "https://hit-c.com/" } }
 ];
 
 const EXPERIENCE = [
@@ -514,6 +582,23 @@ document.getElementById('projectsContainer').innerHTML = PROJECTS.map(p => `
     </div>` : ''}
     <div class="stack-tags">${p.stack.map(s => `<span>${s}</span>`).join('')}</div>
     ${projectLinks(p.links)}
+  </div>
+`).join('');
+
+function moreProjectLinks(links){
+  if (!links) return '';
+  const items = [];
+  if (links.website) items.push(`<a href="${links.website}" target="_blank" rel="noopener">${bilingual('Website ↗','الموقع ↗')}</a>`);
+  if (links.ios) items.push(`<a href="${links.ios}" target="_blank" rel="noopener">App Store ↗</a>`);
+  if (links.android) items.push(`<a href="${links.android}" target="_blank" rel="noopener">Google Play ↗</a>`);
+  return items.length ? `<div class="mi-links">${items.join('')}</div>` : '';
+}
+
+document.getElementById('moreProjectsContainer').innerHTML = MORE_PROJECTS.map(p => `
+  <div class="more-item">
+    <div class="mi-title">${bilingual(p.title_en, p.title_ar)}</div>
+    <div class="mi-desc">${bilingual(p.desc_en, p.desc_ar)}</div>
+    ${moreProjectLinks(p.links)}
   </div>
 `).join('');
 
